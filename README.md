@@ -2,6 +2,10 @@
 
 Talk PDF is a responsive web app that allows users to upload PDF documents and chat with them using the Gemini API. Built with Next.js 13+, Tailwind CSS, and supports multi-conversation history with a sleek, dark mode UI.
 
+## 🌐 Live Demo
+https://talk-pdf-seven.vercel.app/login
+
+
 ## 🚀 Features
 
 - 📁 Upload PDF files

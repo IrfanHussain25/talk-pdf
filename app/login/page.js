@@ -18,14 +18,44 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4">
-      <h1 className="text-2xl mb-4">Login</h1>
-      <form className="flex flex-col gap-4 w-full max-w-sm" onSubmit={handleLogin}>
-        <input className="border p-2" type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-        <input className="border p-2" type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        {error && <p className="text-red-500">{error}</p>}
-        <button className="bg-green-500 text-white p-2 rounded" type="submit">Log In</button>
-      </form>
+    <div className="flex items-center justify-center min-h-screen bg-gray-950 text-white px-4">
+      <div className="w-full max-w-md bg-gray-900 p-8 rounded-lg shadow-lg">
+        <h1 className="text-3xl font-bold mb-6 text-center">Welcome Back</h1>
+        <form className="flex flex-col gap-4" onSubmit={handleLogin}>
+          <input
+            type="email"
+            placeholder="Email"
+            className="p-3 rounded bg-gray-800 border border-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            className="p-3 rounded bg-gray-800 border border-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          {error && <p className="text-red-500 text-sm">{error}</p>}
+          <button
+            type="submit"
+            className="bg-blue-600 hover:bg-blue-700 transition duration-200 text-white py-2 px-4 rounded font-medium cursor-pointer"
+          >
+            Log In
+          </button>
+        </form>
+        <p className="mt-4 text-center text-sm text-gray-400">
+          Don't have an account?{' '}
+          <button
+            onClick={() => router.push('/signup')}
+            className="text-blue-400 hover:underline cursor-pointer"
+          >
+            Sign Up
+          </button>
+        </p>
+      </div>
     </div>
   )
 }
