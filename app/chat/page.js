@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { HiMenu, HiX } from 'react-icons/hi';
+import Markdown from 'react-markdown';
 import { supabase } from '@/lib/supabaseClient';
 import { useRouter } from 'next/navigation';
 
@@ -124,32 +125,36 @@ export default function ChatPage() {
           <h2 className="font-bold text-lg">Conversations</h2>
         </div>
         <div className="flex-1 overflow-y-auto space-y-2">
-          {conversations.map((conv) => (
-            <div
-              key={conv.id}
-              className={`p-2 rounded cursor-pointer ${activeConversation?.id === conv.id
+          {conversations.length === 0 ? (
+            <p className="text-gray-400 text-sm text-center mt-4">No conversations to show</p>
+          ) : (
+            conversations.map((conv) => (
+              <div
+                key={conv.id}
+                className={`p-2 rounded cursor-pointer ${activeConversation?.id === conv.id
                   ? 'bg-blue-800 text-white'
                   : 'hover:bg-gray-700'
-                }`}
-              onClick={() => {
-                setActiveConversation(conv);
-                setSidebarOpen(false);
-              }}
-            >
-              <div className="flex justify-between items-center">
-                <span className="truncate">{conv.title}</span>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    deleteConversation(conv.id);
-                  }}
-                  className="text-red-400 text-xs cursor-pointer"
-                >
-                  ✕
-                </button>
+                  }`}
+                onClick={() => {
+                  setActiveConversation(conv);
+                  setSidebarOpen(false);
+                }}
+              >
+                <div className="flex justify-between items-center">
+                  <span className="truncate">{conv.title}</span>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deleteConversation(conv.id);
+                    }}
+                    className="text-red-400 text-xs cursor-pointer"
+                  >
+                    ✕
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
         <button
           onClick={handleLogout}
@@ -183,22 +188,32 @@ export default function ChatPage() {
         {/* Messages */}
         <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4 flex flex-col-reverse bg-gray-900">
           <div ref={bottomRef} />
-          {messages
-            .slice()
-            .reverse()
-            .map((msg, idx) => (
-              <div key={idx} className="space-y-2">
-                <div className="bg-gray-800 p-3 rounded shadow border border-gray-700">
-                  <strong className="text-blue-400">You:</strong>{' '}
-                  <span className="text-white">{msg.question}</span>
+
+          {messages.length === 0 ? (
+            <div className="text-center text-gray-400 mt-10 text-lg">
+              {activeConversation
+                ? 'Start chatting with your PDF by asking a question!'
+                : 'Select a conversation or create a new one to begin.'}
+            </div>
+          ) : (
+            messages
+              .slice()
+              .reverse()
+              .map((msg, idx) => (
+                <div key={idx} className="space-y-2">
+                  <div className="bg-gray-800 p-3 rounded shadow border border-gray-700">
+                    <strong className="text-blue-400">You:</strong>{' '}
+                    <span className="text-white">{msg.question}</span>
+                  </div>
+                  <div className="bg-gray-700 p-3 rounded shadow border border-gray-600 whitespace-pre-line">
+                    <strong className="text-green-400">Gemini:</strong>{' '}
+                    <span className="text-white"><Markdown>{msg.response}</Markdown></span>
+                  </div>
                 </div>
-                <div className="bg-gray-700 p-3 rounded shadow border border-gray-600 whitespace-pre-line">
-                  <strong className="text-green-400">Gemini:</strong>{' '}
-                  <span className="text-white">{msg.response}</span>
-                </div>
-              </div>
-            ))}
+              ))
+          )}
         </div>
+
 
         {/* Input */}
         <div className="p-4 border-t border-gray-700 bg-gray-800 flex flex-col sm:flex-row gap-2 items-center">
@@ -218,7 +233,7 @@ export default function ChatPage() {
           <button
             onClick={handleAsk}
             disabled={loading}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded w-full sm:w-auto"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded w-full sm:w-auto cursor-pointer"
           >
             {loading ? 'Asking...' : 'Ask'}
           </button>
