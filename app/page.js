@@ -11,7 +11,7 @@ export default function Home() {
       if (data.session) router.push("/chat")
       else router.push("/login")
     })
-  }, [router])
+  }, [])
 
   return <p>Loading...</p>
 }
